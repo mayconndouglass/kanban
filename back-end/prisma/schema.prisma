@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -10,9 +7,74 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Project {
+    id          String   @id @default(uuid())
+    name        String
+    description String?
+    created_at  DateTime @default(now())
+
+    user  User   @relation(fields: [admin], references: [id])
+    admin String
+
+    ProjectUser ProjectUser[]
+
+    @@map("projects")
+}
+
 model User {
-    id   String @id @default(uuid())
-    name String
+    id            String @id @default(uuid())
+    name          String
+    email         String @unique
+    password_hash String
+
+    ProjectUser ProjectUser[]
+    Project     Project[]
+    UserTasks   UserTasks[]
 
     @@map("users")
+}
+
+model ProjectUser {
+    user       User    @relation(fields: [user_id], references: [id])
+    project    Project @relation(fields: [project_id], references: [id])
+    user_id    String
+    project_id String
+
+    @@id([user_id, project_id])
+    @@map("project_user")
+}
+
+// Será que precisa de uma row chamada order(ordem) ?
+model Column {
+    id         String   @id @default(uuid())
+    name       String
+    created_at DateTime @default(now())
+    Task       Task[]
+
+    @@map("columns")
+}
+
+model Task {
+    id          String   @id @default(uuid())
+    name        String
+    description String
+    created_at  DateTime @default(now())
+    dueDate     DateTime
+
+    column    Column @relation(fields: [column_id], references: [id])
+    column_id String
+
+    UserTasks UserTasks[]
+
+    @@map("tasks")
+}
+
+model UserTasks {
+    user    User   @relation(fields: [user_id], references: [id])
+    task    Task   @relation(fields: [task_id], references: [id])
+    user_id String
+    task_id String
+
+    @@id([user_id, task_id])
+    @@map("user_tasks")
 }
