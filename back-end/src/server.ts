@@ -1,4 +1,4 @@
 import { app } from "./app"
 import { env } from "./env"
 
-app.listen(env.PORT, () => console.log("Server running 😁"))
+app.listen(env.PORT, () => console.log("Server running 😁🚀"))
