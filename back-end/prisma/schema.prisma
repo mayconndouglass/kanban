@@ -11,21 +11,22 @@ model Project {
     id          String   @id @default(uuid())
     name        String
     description String?
-    created_at  DateTime @default(now())
+    createdAt   DateTime @default(now()) @map("created_at")
 
     user  User   @relation(fields: [admin], references: [id])
     admin String
 
     ProjectUser ProjectUser[]
+    Column      Column[]
 
     @@map("projects")
 }
 
 model User {
-    id            String @id @default(uuid())
-    name          String
-    email         String @unique
-    password_hash String
+    id           String @id @default(uuid())
+    name         String
+    email        String @unique
+    passwordHash String @map("password_hash")
 
     ProjectUser ProjectUser[]
     Project     Project[]
@@ -35,21 +36,24 @@ model User {
 }
 
 model ProjectUser {
-    user       User    @relation(fields: [user_id], references: [id])
-    project    Project @relation(fields: [project_id], references: [id])
-    user_id    String
-    project_id String
+    user      User    @relation(fields: [userId], references: [id])
+    project   Project @relation(fields: [projectId], references: [id])
+    userId    String  @map("user_id")
+    projectId String  @map("project_id")
 
-    @@id([user_id, project_id])
+    @@id([userId, projectId])
     @@map("project_user")
 }
 
 // Será que precisa de uma row chamada order(ordem) ?
 model Column {
-    id         String   @id @default(uuid())
-    name       String
-    created_at DateTime @default(now())
-    Task       Task[]
+    id        String   @id @default(uuid())
+    name      String
+    createdAt DateTime @default(now()) @map("create_at")
+    project   Project  @relation(fields: [projectId], references: [id])
+    projectId String   @map("project_id")
+
+    Task Task[]
 
     @@map("columns")
 }
@@ -58,11 +62,11 @@ model Task {
     id          String   @id @default(uuid())
     name        String
     description String
-    created_at  DateTime @default(now())
-    dueDate     DateTime
+    createdAt   DateTime @default(now()) @map("create_at")
+    dueDate     DateTime @map("due_date")
 
-    column    Column @relation(fields: [column_id], references: [id])
-    column_id String
+    column   Column @relation(fields: [columnId], references: [id])
+    columnId String @map("column_id")
 
     UserTasks UserTasks[]
 
@@ -70,11 +74,11 @@ model Task {
 }
 
 model UserTasks {
-    user    User   @relation(fields: [user_id], references: [id])
-    task    Task   @relation(fields: [task_id], references: [id])
-    user_id String
-    task_id String
+    user   User   @relation(fields: [userId], references: [id])
+    task   Task   @relation(fields: [taskId], references: [id])
+    userId String @map("user_id")
+    taskId String @map("task_id")
 
-    @@id([user_id, task_id])
+    @@id([userId, taskId])
     @@map("user_tasks")
 }
