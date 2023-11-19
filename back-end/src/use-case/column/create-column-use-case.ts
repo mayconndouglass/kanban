@@ -17,7 +17,7 @@ export class CreateColumnUseCase {
             throw new Error("Resource Not Found")
         }
 
-        const column = new ColumnEntity(data)
+        const column = ColumnEntity.create(data)
         const persistedColumn = await this.columnRepository.create(column)
 
         return { column: { ...persistedColumn } }
