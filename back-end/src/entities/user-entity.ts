@@ -1,22 +1,15 @@
-import { v4 as uuidv4 } from "uuid"
+import { BaseEntity, BaseEntityProps } from "./base-entity"
 
-interface UserEntityProps {
-    id?: string
+interface UserEntityProps extends BaseEntityProps {
     name: string
     email: string
     passwordHash: string
 }
 
-export class UserEntity {
-    public id: string
-    public name: string
-    public email: string
-    public passwordHash: string
+export class UserEntity extends BaseEntity<UserEntityProps> {
+    static create(props: UserEntityProps) {
+        const user = new UserEntity(props)
 
-    constructor(props: UserEntityProps) {
-        this.id = props.id ?? uuidv4()
-        this.name = props.name
-        this.email = props.email
-        this.passwordHash = props.passwordHash
+        return user
     }
 }
