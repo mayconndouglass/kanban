@@ -1,22 +1,9 @@
-import { v4 as uuidv4 } from "uuid"
+import { BaseEntity, BaseEntityProps } from "./base-entity"
 
-interface ColumnEntityProps {
-    id?: string
+interface ColumnEntityProps extends BaseEntityProps {
     name: string
-    createdAt?: Date
+    createdAt: Date
     projectId: string
 }
 
-export class ColumnEntity {
-    public id: string
-    public name: string
-    public createdAt: Date
-    public projectId: string
-
-    constructor(props: ColumnEntityProps) {
-        this.id = props.id ?? uuidv4()
-        this.name = props.name
-        this.createdAt = props.createdAt ?? new Date()
-        this.projectId = props.projectId
-    }
-}
+export class ColumnEntity extends BaseEntity<ColumnEntityProps> { }

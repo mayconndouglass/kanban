@@ -16,7 +16,7 @@ export class RegisterUserUseCase {
         const { password, ...restData } = data
         const passwordHash = await hash(password, 10)
 
-        const user = new UserEntity({ ...restData, passwordHash })
+        const user = UserEntity.create({ ...restData, passwordHash })
         const persistedUser = await this.userRepository.create(user)
 
         return { user: { ...persistedUser } }
