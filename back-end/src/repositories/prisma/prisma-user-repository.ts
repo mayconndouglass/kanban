@@ -1,6 +1,6 @@
 import { UserEntity } from "@/entities/user-entity"
-import { UserRepository } from "../interfaces/user-repository"
 import { prisma } from "@/lib/prisma"
+import { UserRepository } from "../interfaces/user-repository"
 
 export class PrismaUserRepository implements UserRepository {
     async create(data: UserEntity) {
@@ -11,6 +11,11 @@ export class PrismaUserRepository implements UserRepository {
 
     async findByEmail(email: string) {
         const user = await prisma.user.findUnique({ where: { email } })
+
+        return user
+    }
+    async findById(id: string) {
+        const user = await prisma.user.findUnique({ where: { id } })
 
         return user
     }
