@@ -5,6 +5,6 @@ const router = Router()
 
 const createProjectController = new CreateProjectController()
 
-router.post("/projects", createProjectController.handler)
+router.post("/project/create", createProjectController.handler)
 
 export default router
