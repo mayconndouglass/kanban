@@ -1,6 +1,6 @@
-import { Prisma, Project } from "@prisma/client"
-import { ProjectRepository } from "../interfaces/project-repository"
+import { ProjectEntity } from "@/entities/project-entity"
 import { prisma } from "@/lib/prisma"
+import { ProjectRepository } from "../interfaces/project-repository"
 
 export class PrismaProjectRepository implements ProjectRepository {
     async findById(id: string) {
@@ -9,10 +9,9 @@ export class PrismaProjectRepository implements ProjectRepository {
         return project
     }
 
-    async create(data: Prisma.ProjectUncheckedCreateInput): Promise<Project> {
-        const project = await prisma.project.create({ data })
+    async create(data: ProjectEntity) {
+        const project = await prisma.project.create({ data: data.props })
 
         return project
     }
-
 }
