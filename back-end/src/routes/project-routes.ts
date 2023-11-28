@@ -1,4 +1,4 @@
-import { CreateProjectController } from "../use-case/project/create-project-controller"
+import { CreateProjectController } from "../use-case/project/create-project/create-project-controller"
 import { Router } from "express"
 
 const router = Router()

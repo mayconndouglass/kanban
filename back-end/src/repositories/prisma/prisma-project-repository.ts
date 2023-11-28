@@ -3,6 +3,17 @@ import { prisma } from "@/lib/prisma"
 import { ProjectRepository } from "../interfaces/project-repository"
 
 export class PrismaProjectRepository implements ProjectRepository {
+    async findManyByUser(userId: string) {
+        const projects = await prisma.projectUser.findMany(
+            { where: { userId: userId }, select: { project: true } }
+        )
+
+        const userProjects = projects.map(({ project }) =>
+            ProjectEntity.create({ ...project }))
+
+        return userProjects
+    }
+
     async findById(id: string) {
         const project = await prisma.project.findUnique({ where: { id } })
 

@@ -7,7 +7,8 @@ export class RegisterUserUseCase {
     constructor(private userRepository: UserRepository) { }
 
     async execute(data: RegisterUserDTO) {
-        const userWithSameEmail = await this.userRepository.findByEmail(data.email)
+        const userWithSameEmail = await this.userRepository.
+            findByEmail(data.email)
 
         if (userWithSameEmail) {
             throw new Error("Email already exists.")

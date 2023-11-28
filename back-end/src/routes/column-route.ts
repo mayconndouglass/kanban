@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { CreateColumnController } from "@/use-case/column/create-column-controller"
+import { CreateColumnController } from "@/use-case/column/create-column/create-column-controller"
 
 const router = Router()
 

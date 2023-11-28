@@ -20,8 +20,9 @@ export class PrismaUserRepository implements UserRepository {
     }
     async findById(id: string) {
         const user = await prisma.user.findUnique({ where: { id } })
-
+        console.log("repositorie era p ser null", user)
         if (!user) {
+            console.log("não entrou aqui ?")
             return null
         }
 
