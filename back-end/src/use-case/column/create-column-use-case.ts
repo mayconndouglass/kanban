@@ -6,7 +6,7 @@ import { ColumnEntity } from "@/entities/column-entity"
 export class CreateColumnUseCase {
     constructor(
         private columnRepository: ColumnRepository,
-        private projectRepository: ProjectRepository
+        private projectRepository: ProjectRepository,
     ) { }
 
     async execute(data: CreateColumnDTO) {
@@ -17,9 +17,14 @@ export class CreateColumnUseCase {
             throw new Error("Resource Not Found")
         }
 
-        const column = ColumnEntity.create(data)
-        const persistedColumn = await this.columnRepository.create(column)
+        if (projectExists.admin !== data.adminId) {
+            throw new Error("Not Allowed")
+        }
 
-        return { column: { ...persistedColumn } }
+        const column = ColumnEntity.create(data)
+
+        await this.columnRepository.create(column)
+
+        return column
     }
 }

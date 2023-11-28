@@ -1,6 +1,6 @@
-import { BaseEntity, BaseEntityProps } from "./base-entity"
+import { BaseEntity } from "./base-entity"
 
-interface ColumnEntityProps extends BaseEntityProps {
+interface ColumnEntityProps {
     name: string
     createdAt: Date
     projectId: string
@@ -8,12 +8,15 @@ interface ColumnEntityProps extends BaseEntityProps {
 
 export class ColumnEntity extends BaseEntity<ColumnEntityProps> {
     static create(
-        props: Omit<ColumnEntityProps, "createdAt"> & { createdAt?: Date }
+        props: Omit<ColumnEntityProps, "createdAt"> &
+        { id?: string, createdAt?: Date }
     ) {
+        const { id, ...restData } = props
+
         const column = new ColumnEntity({
-            ...props,
-            createdAt: props.createdAt ?? new Date()
-        })
+            ...restData,
+            createdAt: props.createdAt ?? new Date(),
+        }, id)
 
         return column
     }

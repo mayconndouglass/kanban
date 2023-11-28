@@ -1,21 +1,28 @@
-import { BaseEntity, BaseEntityProps } from "./base-entity"
+import { BaseEntity } from "./base-entity"
 
-interface ProjectEntityProps extends BaseEntityProps {
+interface ProjectEntityProps {
     name: string;
-    description?: string;
+    description?: string | null;
     admin: string;
     createdAt: Date;
 }
 
 export class ProjectEntity extends BaseEntity<ProjectEntityProps> {
     static create(
-        props: Omit<ProjectEntityProps, "createdAt"> & { createdAt?: Date }
+        props: Omit<ProjectEntityProps, "createdAt"> &
+        { id?: string, createdAt?: Date }
     ) {
+        const { id, ...restData } = props
+
         const project = new ProjectEntity({
-            ...props,
+            ...restData,
             createdAt: props.createdAt ?? new Date(),
-        })
+        }, id)
 
         return project
+    }
+
+    get admin() {
+        return this.props.admin
     }
 }

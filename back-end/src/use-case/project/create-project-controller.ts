@@ -22,9 +22,9 @@ export class CreateProjectController {
                 prismaUserRepository
             )
 
-            const { project } = await createProjectUseCase.execute(data)
+            const { id, props } = await createProjectUseCase.execute(data)
 
-            response.status(201).send({ project })
+            response.status(201).send({ id, ...props })
         } catch (error) {
             response.status(404).send({ message: "Resource Not Found Error." })
         }

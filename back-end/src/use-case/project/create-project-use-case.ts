@@ -17,8 +17,9 @@ export class CreateProjectUseCase {
         }
 
         const project = ProjectEntity.create(data)
-        const persistedProject = await this.projectRepository.create(project)
 
-        return { project: { ...persistedProject } }
+        await this.projectRepository.create(project)
+
+        return project
     }
 }

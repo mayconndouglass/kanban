@@ -5,6 +5,6 @@ const router = Router()
 
 const createColumnController = new CreateColumnController()
 
-router.post("/create/column", createColumnController.handle)
+router.post("/column/create", createColumnController.handle)
 
 export default router

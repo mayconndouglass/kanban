@@ -3,9 +3,9 @@ import { ColumnRepository } from "../interfaces/column-repository"
 import { prisma } from "@/lib/prisma"
 
 export class PrismaColumnRepository implements ColumnRepository {
-    async create(data: ColumnEntity) {
-        const column = await prisma.column.create({ data: data.props })
+    async create({ id, props }: ColumnEntity) {
+        const column = await prisma.column.create({ data: { id, ...props } })
 
-        return column
+        return ColumnEntity.create({ ...column })
     }
 }

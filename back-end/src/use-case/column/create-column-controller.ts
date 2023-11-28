@@ -8,10 +8,11 @@ export class CreateColumnController {
     async handle(request: Request, response: Response) {
         const createColumnBodySchema = z.object({
             name: z.string(),
-            projectId: z.string()
+            projectId: z.string(),
+            adminId: z.string()
         })
 
-        const data = await createColumnBodySchema.parse(request.body)
+        const data = createColumnBodySchema.parse(request.body)
 
         try {
             const projectRepository = new PrismaProjectRepository()
@@ -21,9 +22,9 @@ export class CreateColumnController {
                 projectRepository
             )
 
-            const { column } = await createColumnUseCase.execute(data)
+            const { id, props } = await createColumnUseCase.execute(data)
 
-            response.status(201).send({ column })
+            response.status(201).send({ id, ...props })
         } catch (error) {
             response.status(404).send({ message: "Resource Not Found Error." })
         }

@@ -5,6 +5,6 @@ const router = Router()
 
 const registerUserController = new RegisterUserController()
 
-router.post("/register/user", registerUserController.handle)
+router.post("/user/register", registerUserController.handle)
 
 export default router

@@ -17,9 +17,9 @@ export class RegisterUserController {
             const userRepositry = new PrismaUserRepository()
             const registerUserUseCase = new RegisterUserUseCase(userRepositry)
 
-            const { user } = await registerUserUseCase.execute(data)
+            const { id, props } = await registerUserUseCase.execute(data)
 
-            response.status(201).send({ ...user, passwordHash: undefined })
+            response.status(201).send({ id, ...props, passwordHash: undefined })
         } catch (error) {
             response.status(409).send({ message: "Email Already Exists" })
         }
