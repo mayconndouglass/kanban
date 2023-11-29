@@ -2,6 +2,8 @@ import { ProjectRepository } from "@/repositories/interfaces/project-repository"
 import { CreateColumnDTO } from "./create-column-dto"
 import { ColumnRepository } from "@/repositories/interfaces/column-repository"
 import { ColumnEntity } from "@/entities/column-entity"
+import { ResourceNotFound } from "@/use-case/errors/resource-not-found-error"
+import { NotAllowed } from "@/use-case/errors/not-allowed-error"
 
 export class CreateColumnUseCase {
     constructor(
@@ -14,11 +16,11 @@ export class CreateColumnUseCase {
             findById(data.projectId)
 
         if (!projectExists) {
-            throw new Error("Resource Not Found")
+            throw new ResourceNotFound()
         }
 
         if (projectExists.admin !== data.adminId) {
-            throw new Error("Not Allowed")
+            throw new NotAllowed()
         }
 
         const column = ColumnEntity.create(data)

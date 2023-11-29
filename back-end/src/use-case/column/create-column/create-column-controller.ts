@@ -3,6 +3,8 @@ import { PrismaProjectRepository } from "@/repositories/prisma/prisma-project-re
 import { Request, Response } from "express"
 import { z } from "zod"
 import { CreateColumnUseCase } from "./create-column-use-case"
+import { ResourceNotFound } from "@/use-case/errors/resource-not-found-error"
+import { NotAllowed } from "@/use-case/errors/not-allowed-error"
 
 export class CreateColumnController {
     async handle(request: Request, response: Response) {
@@ -26,7 +28,15 @@ export class CreateColumnController {
 
             response.status(201).send({ id, ...props })
         } catch (error) {
-            response.status(404).send({ message: "Resource Not Found Error." })
+            if (error instanceof ResourceNotFound) {
+                return response.status(404).send({ message: error.message })
+            }
+
+            if (error instanceof NotAllowed) {
+                return response.status(403).send({ message: error.message })
+            }
+
+            response.status(500).send({ message: "Internal Server Error" })
         }
     }
 }

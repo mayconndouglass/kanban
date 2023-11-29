@@ -3,6 +3,7 @@ import { z } from "zod"
 import { PrismaProjectRepository } from "@/repositories/prisma/prisma-project-repository"
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository"
 import { FetchAllUserProjectsUseCase } from "./fetch-all-user-projects-use-case"
+import { ResourceNotFound } from "@/use-case/errors/resource-not-found-error"
 
 export class FetchAllUserProjectsController {
     async handle(request: Request, response: Response) {
@@ -20,12 +21,16 @@ export class FetchAllUserProjectsController {
                 projectRepository
             )
 
-            const projects = await fetchAllUserProjectUseCase.
-                execute({ userId: data.id })
+            const projects = await fetchAllUserProjectUseCase
+                .execute({ userId: data.id })
 
             response.status(200).send(projects)
-        } catch (err) {
-            console.log(err)
+        } catch (error) {
+            if (error instanceof ResourceNotFound) {
+                return response.status(404).send({ message: error.message })
+            }
+
+            response.status(500).send({ message: "Internal Server Error" })
         }
     }
 }

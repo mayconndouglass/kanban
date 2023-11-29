@@ -3,6 +3,7 @@ import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-reposito
 import { Request, Response } from "express"
 import { z } from "zod"
 import { CreateProjectUseCase } from "./create-project-use-case"
+import { ResourceNotFound } from "@/use-case/errors/resource-not-found-error"
 
 export class CreateProjectController {
     public async handle(request: Request, response: Response) {
@@ -26,7 +27,11 @@ export class CreateProjectController {
 
             response.status(201).send({ id, ...props })
         } catch (error) {
-            response.status(404).send({ message: "Resource Not Found Error." })
+            if (error instanceof ResourceNotFound) {
+                return response.status(404).send({ message: error.message })
+            }
+
+            response.status(500).send({ message: "Internal Server Error" })
         }
     }
 }

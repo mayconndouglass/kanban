@@ -2,6 +2,7 @@ import { UserRepository } from "@/repositories/interfaces/user-repository"
 import { RegisterUserDTO } from "./register-user-dto"
 import { hash } from "bcryptjs"
 import { UserEntity } from "@/entities/user-entity"
+import { EmailAlreadyExists } from "@/use-case/errors/email-already-exists-error"
 
 export class RegisterUserUseCase {
     constructor(private userRepository: UserRepository) { }
@@ -11,7 +12,7 @@ export class RegisterUserUseCase {
             findByEmail(data.email)
 
         if (userWithSameEmail) {
-            throw new Error("Email already exists.")
+            throw new EmailAlreadyExists()
         }
 
         const { password, ...restData } = data
