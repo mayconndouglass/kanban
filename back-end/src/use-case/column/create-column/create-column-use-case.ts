@@ -11,19 +11,19 @@ export class CreateColumnUseCase {
         private projectRepository: ProjectRepository,
     ) { }
 
-    async execute(data: CreateColumnDTO) {
+    async execute({ name, projectId, adminId }: CreateColumnDTO) {
         const projectExists = await this.projectRepository.
-            findById(data.projectId)
+            findById(projectId)
 
         if (!projectExists) {
             throw new ResourceNotFound()
         }
 
-        if (projectExists.admin !== data.adminId) {
+        if (projectExists.admin !== adminId) {
             throw new NotAllowed()
         }
 
-        const column = ColumnEntity.create(data)
+        const column = ColumnEntity.create({ name, projectId })
 
         await this.columnRepository.create(column)
 
