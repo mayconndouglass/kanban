@@ -10,8 +10,8 @@ export class CreateColumnController {
     async handle(request: Request, response: Response) {
         const createColumnBodySchema = z.object({
             name: z.string(),
-            projectId: z.string(),
-            adminId: z.string()
+            projectId: z.string().uuid(),
+            adminId: z.string().uuid()
         })
 
         const data = createColumnBodySchema.parse(request.body)
